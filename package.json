@@ -1,0 +1,22 @@
+{
+  "name": "itc230",
+  "version": "1.0.0",
+  "description": "This is first assignment call index.js that accepts a plain/text message.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jenevascherr/itc230.git"
+  },
+  "keywords": [
+    "itc230"
+  ],
+  "author": "Jeneva Scherr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jenevascherr/itc230/issues"
+  },
+  "homepage": "https://github.com/jenevascherr/itc230#readme"
+}
