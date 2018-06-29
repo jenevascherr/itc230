@@ -8,6 +8,7 @@ http.createServer(function(req,res) {
       fs.readFile('home.html', function (err, data) {
       if (err) return console.error(err);
       res.writeHead(200, {'Content-Type': 'text/html'});
+      res.end(data.toString());
       //console.log(data.toString());
       });
       break;
@@ -16,6 +17,7 @@ http.createServer(function(req,res) {
       fs.readFile('package.json', function (err, data) {
       if (err) return console.error(err);
       res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(data.toString());
       //console.log(data.toString());
       });
       break;
