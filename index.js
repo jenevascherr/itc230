@@ -66,13 +66,13 @@ http.createServer(function(req ,res) {
     case '/delete':
       res.writeHead(200, { 'Content-Type' : 'text/plain' });
       var look = params.query;
-      var write = dt.get(look.name);
+      var write = dt.delete(look.name);
       if (write) {
-      	dt.delete(look.name);
-      res.end('Removed');
-      } else {
-      	res.end('Error: Not Removed');
-      }
+      		string = JSON.stringify(write);
+      		res.end(string);
+      		} else {
+      			res.end('This query is not in the array');
+      		}
       break;
       
     default:

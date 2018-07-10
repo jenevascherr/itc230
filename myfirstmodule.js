@@ -70,12 +70,13 @@ exports.get = (name) => {
 // how to delete an object from an array?
 // watch out for undefined (e.g. try to delete object 'Jeneva'. There is no Jeneva)
 exports.delete = (name) => {
-	students.some((item, index) => {
-		if(students[index][name.key] === name.value){
-			students.splice(index, 1);
-			return true;
-			}
-			return false;
-			});
-			return students;
-		}
+	var result = students.findIndex(student => student.name === name);
+	console.log(result);
+	if (result !== -1) {
+		var removed = students.splice(result,1);
+		console.log(removed[0]);
+		return "You have removed" + removed[0];
+	} else {
+		return "Cannot find " + name;
+	}
+}
