@@ -21,7 +21,8 @@ http.createServer(function(req ,res) {
   var params = url.parse(req.url, true);
   var path = params.pathname;
   
-  switch(path) {
+  var cmd = findCommand(path);
+  switch(cmd) {
     case '/':
       fs.readFile('home.html', function (err, data) {
       if (err) return console.error(err);
@@ -80,3 +81,29 @@ http.createServer(function(req ,res) {
       break;
     }
 }).listen(process.env.PORT || 3000);
+
+/**
+	find the command portion of the path.
+	The /, /about and /getall don't have any other component
+	The /get and /delete commands will have a key
+	If none of the above, return 'unknown'
+**/
+var findCommand = function(path) {
+	switch(path) {
+		case '/':
+		case '/about':
+		case '/getall': {
+			return path;
+		}
+	}
+	
+	if(path.startsWith('/get')) {
+		return '/get';
+	}
+	
+	if(path.startsWith('/delete')) {
+		return '/delete';
+	}
+	
+	return 'unknown';
+}

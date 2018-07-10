@@ -57,14 +57,14 @@ exports.getAll = function () {
 // var student = students.name[index];
 // what is student?  undefined  (test for this. maybe return a nicer message than undefined)
 
+/**
+ create a function that will loop though the array to find if query matches by name, if so: break, if not
+ redo on next object. If not matches query, result is undefined. 
+  use a conditional (ternary) operator to return the result or "not found" statements based on conditions.
+**/
 exports.get = (name) => {
-	return students.find((courses) => {
-		if (name){
-			return course.name.toLowerCase() == name.toLowerCase();
-		}else{
-			return 'Not responding';
-			}
-	});
+	var result = students.find(student => student.name === name);
+	return (result) ? result.name + ", " + result.course + ", " + result.grade : "Cannot find " + name;
 }
 
 // how to delete an object from an array?
