@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "package",
+=======
+  "name": "itc230",
+>>>>>>> 37d3633edfd5f8dfd07071304d5c3401b9ad94a4
   "version": "1.0.0",
   "description": "This is first assignment call index.js that accepts a plain/text message.",
   "main": "index.js",
