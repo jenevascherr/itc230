@@ -1,109 +1,47 @@
-var http = require('http'); 
-var fs = require('fs');
-const qs = require('querystring');
-var url = require('url');
-var dt = require('./myfirstmodule');
+'use strict'
 
-function serveStaticFile(res, path, contentType, responseCode) {
-	if(!responseCode) responseCode = 200;
-	fs.readFile(_dirname + path, function(err,data) {
-	if(err) {
-		res.writeHead(500, { 'Content-Type': 'text/plain' });
-		res.end('500 - Internal Error');
-	} else {
-		res.writeHead(responseCode, { 'Content-Type' : contentType });
-		res.end(data);
-		}
-	});
-}
+let student = require("./lib/myfirstmodule.js");
 
-http.createServer(function(req ,res) {
-  var params = url.parse(req.url, true);
-  var path = params.pathname;
-  
-  var cmd = findCommand(path);
-  switch(cmd) {
-    case '/':
-      fs.readFile('home.html', function (err, data) {
-      if (err) return console.error(err);
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.end(data.toString());
-      //console.log(data.toString());
-      });
-      break;
-          
-    case '/about':
-      fs.readFile('package.json', function (err, data) {
-      if (err) return console.error(err);
-      res.writeHead(200, {'Content-Type': 'application/json'});
-      res.end(data.toString());
-      //console.log(data.toString());
-      });
-      break;
-    
-       case '/getall':
-      fs.readFile('home.html', function (err, data) {
-      if (err) return console.error(err);
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.write(dt.getAll());
-      res.end();
-      //console.log(data.toString());
-      });
-      break;
-    
-    case '/get':
-      	res.writeHead(200, { 'Content-Type' : 'text/plain' });
-      	var look = params.query;
-      	var write = dt.get(look.name);
-      	if (write) {
-      		string = JSON.stringify(write);
-      		res.end(string);
-      		} else {
-      			res.end('This query is not in the array');
-      		}
-      break;
-      
-    case '/delete':
-      res.writeHead(200, { 'Content-Type' : 'text/plain' });
-      var look = params.query;
-      var write = dt.delete(look.name);
-      if (write) {
-      		string = JSON.stringify(write);
-      		res.end(string);
-      		} else {
-      			res.end('This query is not in the array');
-      		}
-      break;
-      
-    default:
-      res.writeHead(404, {'Content-Type': 'text/plain'});
-      res.end('CODE 404: The URL entered does not exist');
-      break;
-    }
-}).listen(process.env.PORT || 3000);
+const express = require("express");
+const app = express();
 
-/**
-	find the command portion of the path.
-	The /, /about and /getall don't have any other component
-	The /get and /delete commands will have a key
-	If none of the above, return 'unknown'
-**/
-var findCommand = function(path) {
-	switch(path) {
-		case '/':
-		case '/about':
-		case '/getall': {
-			return path;
-		}
-	}
+app.set('port', process.env.PORT || 3000);
+app.use(express.static(__dirname + '/public'));
+app.use(require("body-parser").urlencoded({extended: true}));
+
+let handlebars = require("express-handlebars");
+app.engine(".html", handlebars({extname: '.html'}));
+app.set("view engine", ".html");
+
+app.get('/', function(req, res){
+	res.type('text/html');
+	res.sendFile(__dirname + '/public/home.html');
+});
+
+app.get('/about', function(req, res){
+	res.type('application/json');
+	res.sendFile(__dirname + '/package.json');
+});
+
+app.get('/delete', function(req,res){
+	let result = student.delete(req.query.name);
+	res.render('delete', {name: req.query.name, result: result});
+});
+
+app.post('/get', function(req,res){
+	console.log('You have requested..');
+	console.log(req.body);
+	var found = student.get(req.body.name);
 	
-	if(path.startsWith('/get')) {
-		return '/get';
-	}
-	
-	if(path.startsWith('/delete')) {
-		return '/delete';
-	}
-	
-	return 'unknown';
-}
+	res.render("details", {name: req.body.name, result: found});
+});
+
+app.use(function(req,res) {
+	res.type('text/plain');
+	res.status(404);
+	res.send('404 - Page Not Found');
+});
+
+app.listen(app.get('port'), function() {
+	console.log('Express started');
+});

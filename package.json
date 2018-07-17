@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "name": "package",
-=======
   "name": "itc230",
->>>>>>> 37d3633edfd5f8dfd07071304d5c3401b9ad94a4
   "version": "1.0.0",
   "description": "This is first assignment call index.js that accepts a plain/text message.",
   "main": "index.js",
@@ -22,5 +18,11 @@
   "bugs": {
     "url": "https://github.com/jenevascherr/itc230/issues"
   },
-  "homepage": "https://github.com/jenevascherr/itc230#readme"
+  "homepage": "https://github.com/jenevascherr/itc230#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "update-json-file": "^1.1.1"
+  }
 }
