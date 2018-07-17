@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<h2>Information about {{name}}</h2>
+	{{#if result}}
+		<li>Name: {{ result.name }}
+		<li>Course: {{ result.course }}
+		<li>Grade: {{ result.grade }}
+		<p>
+		<a href="/delete?name={{result.name}}">Delete</a>
+		</p>
+	</form>
+	{{else}}
+	<h1>{{name}} not found.</h1>
+	{{/if}}
+	</body>
+	</html>
