@@ -1,0 +1,11 @@
+<html>
+	<body>
+		<a href = "/">Home</a>
+			{{#if result.RecordAction}}
+			<h2>{{name}} Record Added</h2>
+			Total: {{result.Total}}
+			{{else}}
+			<h2>{{name}} already exists. </h2>
+			{{/if}}
+		</body>
+	</html>
