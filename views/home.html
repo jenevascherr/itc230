@@ -2,8 +2,14 @@
 	<head>
 		<title>This is the Home Page</title>
 	</head>
+	<body>
 		<h1>Student's Lowest Grades</h1>
-        <form action="/get" method="POST">
+		<h2>Accumulated Students</h2>
+		{{#each items}}
+		<p><a href="/detail?name={{ name }}">{{name}}</a></p>
+		{{/each}}
+
+        <form action="/detail" method="POST">
             <input type="text"
                    name="name"
                    required="required" 

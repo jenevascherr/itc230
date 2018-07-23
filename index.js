@@ -1,5 +1,9 @@
 'use strict'
 
+var studentMethods = require("./lib/studentMethods");
+var Student = require("./models/students"); //database model
+
+
 let student = require("./lib/myfirstmodule.js");
 
 const express = require("express");
@@ -13,9 +17,12 @@ let handlebars = require("express-handlebars");
 app.engine(".html", handlebars({extname: '.html'}));
 app.set("view engine", ".html");
 
-app.get('/', function(req, res){
-	res.type('text/html');
-	res.sendFile(__dirname + '/public/home.html');
+app.get('/', function(req, res, next) {
+  studentMethods.getAll().then((items) => {
+    res.render('home', {student: items }); 
+  }).catch((err) =>{
+    return next(err);
+  });
 });
 
 app.get('/about', function(req, res){
@@ -23,17 +30,34 @@ app.get('/about', function(req, res){
 	res.sendFile(__dirname + '/package.json');
 });
 
-app.get('/delete', function(req,res){
-	let result = student.delete(req.query.name);
-	res.render('delete', {name: req.query.name, result: result});
+app.get('/delete', function(req, res, next){
+  Student.remove({ name:req.query.name}, function (err, result){
+   console.log(err) 
+    console.log(result)
+    if (err) return next(err);
+    let deleted = result.n !==0;
+    Student.count((err, total) => {
+      res.type('text/html');
+      res.render('delete', {name: req.query.data, deleted , total: total});
+	});
+  });
 });
 
-app.post('/get', function(req,res){
-	console.log('You have requested..');
-	console.log(req.body);
-	var found = student.get(req.body.name);
-	
-	res.render("details", {name: req.body.name, result: found});
+app.get('/details', function(req,res,next){
+  Student.findOne({name:req.query.name}, function (err, item) {
+    if (err) return next(err);
+    res.type('text/html');
+    res.render('details', {result: item});
+  });
+});
+
+//send POST
+app.post('/detail', function(req,res,next){
+  Student.findOne({name:req.body.name}, function (err, item) {
+    if (err) return next(err);
+    res.type('text/html');
+    res.render('details', {result: item});
+  });
 });
 
 app.use(function(req,res) {
@@ -45,3 +69,4 @@ app.use(function(req,res) {
 app.listen(app.get('port'), function() {
 	console.log('Express started');
 });
+

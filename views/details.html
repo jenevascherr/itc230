@@ -3,15 +3,16 @@
 <body>
 	<h2>Information about {{name}}</h2>
 	{{#if result}}
-		<li>Name: {{ result.name }}
-		<li>Course: {{ result.course }}
-		<li>Grade: {{ result.grade }}
-		<p>
-		<a href="/delete?name={{result.name}}">Delete</a>
-		</p>
-	</form>
+		<li><strong>First Name: </strong>{{ result.name }}</li>
+		<li><strong>Last Name: </strong>{{ result.family }}</li>
+		<li><strong>Course: </strong>{{ result.course }}</li>
+		<li><strong>Grade: </strong>{{ result.grade }}</li>
+		<li><strong>Year: </strong>{{ result.year }}</li>
+		
+		<a href="/delete?name={{ result.name }}">Delete</a>
+        <a href="/">New Search</a>
 	{{else}}
-	<h1>{{name}} not found.</h1>
+	<h1>{{data}} not found.</h1>
 	{{/if}}
 	</body>
 	</html>
