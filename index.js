@@ -13,15 +13,13 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
 app.use(require("body-parser").urlencoded({extended: true}));
 
-let handlebars = require("express-handlebars");
+var handlebars = require("express-handlebars");
 app.engine(".html", handlebars({extname: '.html'}));
 app.set("view engine", ".html");
 
 app.get('/', function(req, res, next) {
-  studentMethods.getAll().then((items) => {
-    res.render('home', {student: items }); 
-  }).catch((err) =>{
-    return next(err);
+	Student.find({}, function (eer, items) {
+	res.render('home.html', {items: items});
   });
 });
 
@@ -43,13 +41,17 @@ app.get('/delete', function(req, res, next){
   });
 });
 
-app.get('/details', function(req,res,next){
+app.get('/detail', function(req,res,next){
   Student.findOne({name:req.query.name}, function (err, item) {
     if (err) return next(err);
     res.type('text/html');
     res.render('details', {result: item});
   });
 });
+
+/*app.get('/add', function(req,res,next){
+	Student.add({name:req.query.name}),
+*/
 
 //send POST
 app.post('/detail', function(req,res,next){
@@ -59,6 +61,60 @@ app.post('/detail', function(req,res,next){
     res.render('details', {result: item});
   });
 });
+
+//api
+app.get('/api/student/:name', (req, res) => {
+	let name = req.params.name;
+	console.log(name);
+	Student.findOne({name: name}, (err, result) => {
+		if (err || !result) return (err);
+		res.json( result );
+	});
+});
+
+app.get('/api/students', (req, res) => {
+	Student.find((err,results) => {
+		if (err || !results) return (err);
+		res.json(results);
+	});
+});
+
+app.get('/api/delete/:name', (req, res) => {
+	Student.remove({"name":req.params.name}, (err, result) => {
+		if (err) return (err);
+		res.json({"deleted": result.n});
+	});
+});
+
+app.get('/api/add/:name/:family/:grade/:course/:year', (req, res) => {
+	let name = req.params.name;
+	Student.update({ name: name}, 
+				   {name: name, family: req.params.family, grade: req.params.grade, course: req.params.course, year: req.params.year }, 
+				   {upsert: true }, (err, result) => {
+		if (err) return(err);
+		res.json({updated: result.nModified});
+	});
+});
+
+app.post('/api/add/', (req, res, next) => {
+	if (!req.body._id) {
+		let Student = new Student({name:req.body.name, family: req.body.family, grade: req.body.grade, course: req.body.course, year: req.body.year });
+		Student.save((err, newStudent) => {
+			if (err) return next(err);
+			console.log(newStudent);
+			res.json({updated: 0, _id: newStudent._id})
+		})
+                                  
+	}else{
+		Student.AddOne({_id: req.body._id}, {name:req.body.name, family: req.body.family, grade: req.body.grade, course: req.body.course, year: req.body.year },
+        {upsert: true }, (err, result) => {
+		if (err) return next(err);
+		res.json({updated: result.nModified, _id: req.body._id});
+
+    });
+    };
+});
+
 
 app.use(function(req,res) {
 	res.type('text/plain');
