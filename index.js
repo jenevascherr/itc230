@@ -75,14 +75,19 @@ app.get('/api/student/:name', (req, res) => {
 app.get('/api/students', (req, res) => {
 	Student.find((err,results) => {
 		if (err || !results) return (err);
-		res.json(results);
+		res.json(message: err.message);
+		} else {
+ 		res.json(results);
 	});
 });
 
 app.get('/api/delete/:name', (req, res) => {
 	Student.remove({"name":req.params.name}, (err, result) => {
 		if (err) return (err);
+		res.json({"deleted": 0, message: err.message});
+		} else {
 		res.json({"deleted": result.n});
+		}
 	});
 });
 
@@ -91,8 +96,11 @@ app.get('/api/add/:name/:family/:grade/:course/:year', (req, res) => {
 	Student.update({ name: name}, 
 				   {name: name, family: req.params.family, grade: req.params.grade, course: req.params.course, year: req.params.year }, 
 				   {upsert: true }, (err, result) => {
-		if (err) return(err);
+		if (err) {
+		res.json({updated: 0, message: err.message});
+		} else {
 		res.json({updated: result.nModified});
+		}
 	});
 });
 
