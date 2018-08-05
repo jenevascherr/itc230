@@ -1,0 +1,33 @@
+{
+  "name": "reactapp",
+  "version": "1.0.0",
+  "description": "Final Homework Assignment for ITC230 involving making an app from reactjs in node terminal and showing it in 3000 server.",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jenevascherr/itc230.git"
+  },
+  "keywords": [
+    "App",
+    "React"
+  ],
+  "author": "Jeneva Scherr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jenevascherr/itc230/issues"
+  },
+  "homepage": "https://github.com/jenevascherr/itc230#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "webpack": "^4.16.4",
+    "webpack-dev-server": "^3.1.5"
+  }
+}
