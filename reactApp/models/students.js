@@ -1,5 +1,4 @@
 //datamodel script
-
 var mongoose = require("mongoose");
 
 // remote db connection settings. For security, connectionString should be in a separate file not committed to git

@@ -1,197 +1,159 @@
-<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf=8">
-		<meta name = "viewport" content="width=device=width">
-		<title>React App Demo</title>
-		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react-dom.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+<head>
+  <meta charset="utf-8" name="viewport" content="width=device-width">
+  <title>Student's Worst Grades</title>
 
-		<style type="text/css">
-  .flex-container {
-      display: -webkit-flex;
-      display: flex;
-      width: 600px;
-      background-color: lightgrey;
-  }
-  #item-list {
-      background-color: cornflowerblue;
-      width: 30%;
-      padding: 0px 10px 0px 0px;
-  }
-  #item-details {
-      background-color: yellow;
-      width: 75%;
-      padding: 10px;
-  }
-		</style>
-		</head>
-		
-		<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+ 
+  <style>
+      body {
+        background: #ddd;
+        font-size: 1em;
+        color: lightpink;
+        font-family: 'helvetica', sans-serif;
+        }
+      
+      h1, h2, h3 {
+          text-align: center;
+      }
+      
+      .itemlist {
+          color: black;
+          font-weight: 700;
+          background: #ccc;
+          border: 1px solid #222;
+          width: 400px;
+          margin: 0 auto;
+          text-decoration: underline;
+          cursor: pointer;
+      }
+      
+      form {
+          color: skyblue;
+          font-weight: 700;
+          background: #ccc;
+          border: 1px solid #222;
+          width: 400px;
+          margin: 0 auto;
+          padding: 5px;
+      }
+      
+      input {
+          border: none;
+          background: #ccc;
+          color: black;
+          font-weight: 700;
+          padding: 5px;
+          font-size: 1em;
+          text-align: center;
+          width: 100%;
+      }
+      
+      button {
+          color: gray;
+          font-size: 1em;
+          border: 1px solid tan;
+          display: block;
+          margin: 0 auto;
+      }
+  </style>
+</head>
 
-<div id="root"></div>
-<script type="text/babel">
-
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+  
+    // create StudentApp component
     class StudentApp extends React.Component{
       constructor(props){
-        super(props);
-        
-		this.state = {
+        super(props); 
+        this.state = {
           items: {{{students}}},
-          filter: "",
+          filter: "", 
           curItem: {}
         };
-        
-        this.onSearchChange = this.onSearchChange.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.onSave = this.onSave.bind(this);
-        this.onDelete = this.onDelete.bind(this);
         this.onClear = this.onClear.bind(this);
       }
-      
-      onSearchChange(event) {
-      
-      this.setState({filter: event.target.value.toLowerCase() });
-      }
-      
+      // show student details when clicked
       showDetails(event){
-      
-      let editItem = this.state.items.find((item) => {
-      	return item._id == event.target.id;
-      });
-      this.setState({curItem: editItem});
-      }
-      
-      onClear() {
-      this.setState({curItem: {}});
-      }
-      
-      onChange(event) {
-      	var newItem = this.state.curItem;
-      	newItem[event.target.name] = event.target.value
-      	this.setState({curItem: newItem});
-      	}
-      	
-      	onSave() {
-      	let newItem = this.state.curItem;
-      	if (!newItem.title) {
-      		return;
-      	}
-      	
-      	fetch("/api/add/", {
-      		method: "POST",
-      			headers: { 'Content-Type': 'application/json' },
-      		body: JSON.stringify(newItem)
-      		}).then(res => res.json())
-      			.then((json) => {
-      			
-      			let newData;
-      			if (!newItem._id) {
-      				newData = this.state.items;
-      				newItem._id = json._id;
-      				newData.push(newItem);
-      			}else{
-      				newData = this.state.items.map((item) => {
-      					if (item._id === newItem._id) {
-      						item = newItem;
-      					}
-      					return item;
-      					});
-      				}
-      	
-      			this.setState({items: newData});
-      			 });
-     		 }
-     		 
-     		 
-     	onDelete(){
-        	let id = this.state.curItem._id;
-        
-        	fetch("/api/delete/" + id).then((response) => {
-         	 return response.json();
-       		 }).then((results) => {
-       		 
-       		const remainder = this.state.items.filter((item) => {
-            return item._id !== id;
-          });
-          
-        	this.setState({items: remainder, curItem: {}});
+        let editItem = this.state.items.find((item) => {
+          return item._id == event.target.id;
         });
+        this.setState({curItem: editItem});
       }
-      
-      	render() {
-      	
-      	return (
+      // reset form
+      onClear() {
+        this.setState({curItem: {}});
+      }
+      // change form to show details
+      onChange(event) {
+        var newItem = this.state.curItem;
+        newItem[event.target.name] = event.target.value
+        this.setState({curItem: newItem});
+      }
+    
+      // render app on page
+      render() {
+        return (
           <div>
-        <h2>"Hello?"</h2>
-          <Title title = "Student's Worst Grades" />
-          <SearchForm filter={this.state.filter} change={this.onSearchChange} />
-          <div className="flex-container">
+          <h1>Record of Student's Worst Grades</h1>
+          <h2>Jeneva Scherr || ITC230 || Summer 2018</h2>
+          <h3>Enrolled</h3>
+          <div className="itemlist">
             <ItemList
                 items={this.state.items} 
                 filter={this.state.filter}
                 show={this.showDetails.bind(this)}
             />
-            
-            <ItemDetails item={this.state.curItem} change={this.onChange} save={this.onSave} reset={this.onClear} delete={this.onDelete} />
+            </div>
+        
+            <br></br><hr></hr>
+                
+            <div className="details">
+              <ItemDetails 
+                  item={this.state.curItem} 
+                  reset={this.onClear}
+             />
             </div>
           </div>
           );
       }
     }
     
-    	const Title = ({title}) => {
-        return (
-           <div><h2>{title}</h2></div>
-        );
-    }
-    
-    	const SearchForm = (props) => {
-        return (
-          <div>
-            <input
-              type="text" placeholder="Enter a search term"
-              value={props.filter}
-              onChange={props.change}
-            /><p/>
-          </div>
-        );
-    }
-    
-    			const ItemList = ({items, filter, show}) => {
-    			const itemNodes = items.map((item) => {
-        		if (!filter || item.title.toLowerCase().includes(filter)) { 
-          		return <li id={item._id} key={item._id} onClick={show}>{item.title}</li>
+    // show student list
+    const ItemList = ({items, filter, show}) => {
+      const itemNodes = items.map((item) => {
+        if (!filter || item.name.toLowerCase().includes(filter)) { 
+          return <li id={item._id} key={item._id} onClick={show}>{item.name}</li>
         }
       });
-      			return <span id="item-list"><ul>{itemNodes}</ul></span>;
+      return <span id="item-list"><ul>{itemNodes}</ul></span>;
     }
-    			const ItemDetails = (props) => {
-        			return (
-         			 <span id="item-details">
-            			<h3>Details:</h3>
-            			<form onChange={props.change}>
-             			 	<input type="text" name="name" placeholder="first name" value={props.item.name || ""} /><p/>
-              				<input type="text" name="family" placeholder="last name" value={props.item.family || ""} /><p/>
-              				<input type="text" name="grade" placeholder="lowest grade" value={props.item.grade || ""} /><p/>
-              				<input type="text" name="course" placeholder="class name" value={props.item.course || ""} /><p/>
-              				<input type="number" name="year" placeholder="year of class" value={getISOstring(props.item.year)} /><p/>
-            			</form>
-            			<button onClick={props.save}>Save</button>  <button onClick={props.reset}>Reset</button> <button onClick={props.delete}>Delete</button>
-          				</span>
-        				);
-   					 }
-   					 
-   					ReactDOM.render(<StudentApp />, document.getElementById('root'));
- 					function getISOstring(dateString) {
-   					 let date = (dateString) ? new Date(dateString) : new Date();
-    				 let month = (date.getMonth() >=9) ? date.getMonth()+1 : "0" + (date.getMonth()+1);
-    				 let day = (date.getDate() >=10) ? date.getDate() : "0" + date.getDate();
-    				 return date.getFullYear() + "-" + month + "-" + day;    
-  						} 
-  						
-  				</script>
-  				</body>
-      			</html>
+    
+    // show student details
+    const ItemDetails = (props) => {
+        return (
+          <span id="item-details">
+            <h3>Student's Information</h3>
+            <form onChange={props.change}>
+              <input type="text" name="name" placeholder="First Name" value={props.item.name || ""} /><p/>
+              <input type="text" name="family" placeholder="Last Name" value={props.item.family || ""} /><p/>
+              <input type="text" name="course" placeholder="Class" value={props.item.course || ""} />
+              <p/>
+              <input type="text" name="year" placeholder="Year of Class" value={props.item.year || ""} />
+              <p/>
+            <button onClick={props.reset}>Start Over</button>
+            </form>
+          </span>
+        );
+    }
+    
+    // display app at 'root' div
+    ReactDOM.render(<StudentApp />, document.getElementById('root'));
+  
+</script>
+</body>
+</html>

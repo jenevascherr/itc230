@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<h2>Information about {{name}}</h2>
+	{{#if result}}
+		<li><strong>First Name: </strong>{{ result.name }}</li>
+		<li><strong>Last Name: </strong>{{ result.family }}</li>
+		<li><strong>Course: </strong>{{ result.course }}</li>
+		<li><strong>Grade: </strong>{{ result.grade }}</li>
+		<li><strong>Year: </strong>{{ result.year }}</li>
+		
+		<a href="/delete?name={{ result.name }}">Delete</a>
+        <a href="/">New Search</a>
+	{{else}}
+	<h1>{{name}} not found.</h1>
+	{{/if}}
+	</body>
+	</html>
