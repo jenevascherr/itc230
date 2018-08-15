@@ -2,9 +2,16 @@
 	<body>
 	<div>
 		<h2>Student Info Deleted: {{name}}</h2>
-		
+		{{#if result}}
+     {{ title }} successfully deleted!
+Remaining items in database {{ count }}
 			<p><strong>Delete Complete:</strong> {{ deleted }} </p>
 			<p><strong>Roll Call: </strong> {{ total }}</p>
+			
+			  {{else}}
+   {{ title }} cannot be deleted since it is not in the database!
+    Remaining items in database: {{ count }}
+{{/if}}
 			<p><a href="/">New Search</a>
 		</div>
         </body>
